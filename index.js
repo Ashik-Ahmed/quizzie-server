@@ -64,8 +64,27 @@ async function run() {
             res.send(result);
         })
 
+        //insert question to DB
+        app.post('/insert-question/:subject', async (req, res) => {
+            const subject = req.params.subject;
+            const qsn = req.body;
 
-        //get gk questions
+            // console.log(subject, qsn);
+
+            let result;
+            if (subject == 'general-knowledge') {
+                result = await gkCollection.insertOne(qsn);
+            }
+            if (subject == 'english') {
+                result = await englishCollection.insertOne(qsn);
+            }
+
+            res.send(result);
+
+        })
+
+
+        //get exam questions
         app.get('/quiz/:subject', async (req, res) => {
 
             // const query = {};
@@ -92,8 +111,19 @@ async function run() {
         app.post('/insert-result', async (req, res) => {
             const examResult = req.body;
 
-            console.log(examResult);
+            // console.log(examResult);
             const result = await resultCollection.insertOne(examResult);
+            res.send(result);
+        })
+
+        //get result by specific user email
+        app.get('/result/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email: email };
+
+            const results = resultCollection.find(query);
+            const result = await results.toArray();
+
             res.send(result);
         })
 
