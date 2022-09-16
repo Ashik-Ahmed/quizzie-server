@@ -93,7 +93,6 @@ async function run() {
 
             const topic = req.params.subject;
             let questions;
-            console.log(topic);
 
             if (topic === 'general-knowledge') {
                 questions = gkCollection.aggregate([{ $sample: { size: 5 } }]);
